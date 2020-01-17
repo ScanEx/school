@@ -1,0 +1,11 @@
+.calc {
+    font-size: 48px;
+    font-weight: bold;
+    font-family: sans-serif;
+}
+.calc td {
+    width: 80px;
+    height: 80px;
+    text-align: center;
+    cursor: default;
+}
