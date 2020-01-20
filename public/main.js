@@ -1,5 +1,5 @@
-var calc;
+var grid;
 window.onload = function () {
     var div = document.querySelector('#app');
-    calc = new Calculator(div);
+    grid = new Grid(div);
 }
