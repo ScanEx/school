@@ -1,6 +1,6 @@
 var Grid = require ('./grid/Grid.js');
-var DB = require ('./db.js');
-var COLUMNS = require('./columns.js');
+// var DB = require ('./db.js');
+// var COLUMNS = require('./columns.js');
 
 window.onload = function () {
     var container = document.querySelector('#app');

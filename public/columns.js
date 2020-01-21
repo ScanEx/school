@@ -1,4 +1,4 @@
-module.exports = {
+var COLUMNS = {
     "VesselID": {
         title: 'VesselID',
         type: 'integer',
