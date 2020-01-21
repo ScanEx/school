@@ -3,7 +3,7 @@ var Grid = function(container, options, onChange) {
     this._options = options || {};
 
     this._container.innerHTML = 
-        '<table class="grid">' +            
+        '<table class="grid">' +
             '<tr><td class="content"></td></tr>' +
             '<tr><td class="footer"></td></tr>' +
         '</table>';
@@ -21,8 +21,8 @@ var Grid = function(container, options, onChange) {
             this._columns.push(this._options.columns[k]);
         }
     }
-                
-    this._current = 0; // текущая страница    
+
+    this._current = 1; // текущая страница
     this._pageSize = this._options.pageSize || 1; // элементов на странице
     this._pages = this._options.pages || 1;
     this._onChange = onChange;
@@ -38,7 +38,7 @@ Grid.prototype = {
             var rows = this._onChange (page, this._pageSize);
             this._render(rows);
         }
-    },    
+    },
 
     _render: function (rows) {
         if (Array.isArray(rows) && rows.length > 0) {
@@ -47,14 +47,14 @@ Grid.prototype = {
                 return '<th>' + c.title + '</th>';
             }).join('') + '</tr></thead>';
             t += '<tbody>';
-            for (var i = 0; i < rows.length; ++i) {                
+            for (var i = 0; i < rows.length; ++i) {
                 t += '<tr>';
                 var cells = rows[i];
                 for (var j = 0; j < this._visibleColumns.length; ++j) {
                     var k = this._visibleColumns[j];
                     t += '<td>';
                     t += cells[k];
-                    t += '</td>';    
+                    t += '</td>';
                 }
                 t += '</tr>';
             }
@@ -64,7 +64,7 @@ Grid.prototype = {
         }
         else {
             this._content.innerHTML = '';
-        }        
+        }
     },
 
     start: function() {
