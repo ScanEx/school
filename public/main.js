@@ -7,13 +7,109 @@ var App = (function () {
         __proto__: null
     });
 
+    function _classCallCheck(instance, Constructor) {
+      if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+      }
+    }
+
+    function _defineProperties(target, props) {
+      for (var i = 0; i < props.length; i++) {
+        var descriptor = props[i];
+        descriptor.enumerable = descriptor.enumerable || false;
+        descriptor.configurable = true;
+        if ("value" in descriptor) descriptor.writable = true;
+        Object.defineProperty(target, descriptor.key, descriptor);
+      }
+    }
+
+    function _createClass(Constructor, protoProps, staticProps) {
+      if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+      if (staticProps) _defineProperties(Constructor, staticProps);
+      return Constructor;
+    }
+
+    var EventTarget =
+    /*#__PURE__*/
+    function () {
+      function EventTarget() {
+        _classCallCheck(this, EventTarget);
+
+        this.listeners = {};
+      }
+
+      _createClass(EventTarget, [{
+        key: "addEventListener",
+        value: function addEventListener(type, callback) {
+          if (!(type in this.listeners)) {
+            this.listeners[type] = [];
+          }
+
+          this.listeners[type].push(callback);
+        }
+      }, {
+        key: "on",
+        value: function on(type, callback) {
+          this.addEventListener(type, callback);
+          return this;
+        }
+      }, {
+        key: "removeEventListener",
+        value: function removeEventListener(type, callback) {
+          if (!(type in this.listeners)) {
+            return;
+          }
+
+          var stack = this.listeners[type];
+
+          for (var i = 0, l = stack.length; i < l; i++) {
+            if (stack[i] === callback) {
+              stack.splice(i, 1);
+              return this.removeEventListener(type, callback);
+            }
+          }
+        }
+      }, {
+        key: "off",
+        value: function off(type, callback) {
+          this.removeEventListener(type, callback);
+          return this;
+        }
+      }, {
+        key: "dispatchEvent",
+        value: function dispatchEvent(event) {
+          if (!(event.type in this.listeners)) {
+            return;
+          }
+
+          var stack = this.listeners[event.type];
+          Object.defineProperty(event, 'target', {
+            enumerable: false,
+            configurable: false,
+            writable: false,
+            value: this
+          });
+
+          for (var i = 0, l = stack.length; i < l; i++) {
+            stack[i].call(this, event);
+          }
+        }
+      }]);
+
+      return EventTarget;
+    }();
+
+    var scanexEventTarget_cjs = EventTarget;
+
     function getCjsExportFromNamespace (n) {
     	return n && n['default'] || n;
     }
 
     getCjsExportFromNamespace(Pager);
 
-    var Pager$1 = function (container, options, onChange) {
+    var Pager$1 = function (container, options) {
+        scanexEventTarget_cjs.call(this); // вызов конструктора родительского объекта
+
         this._container = container;
         this._options = options || {};
         this._max = this._options.max || 1;
@@ -34,55 +130,49 @@ var App = (function () {
         buttons[0].addEventListener('click', this.start.bind(this));
         buttons[1].addEventListener('click', this.back.bind(this));
         buttons[2].addEventListener('click', this.forward.bind(this));
-        buttons[3].addEventListener('click', this.end.bind(this));
-
-        this._onChange = onChange;
+        buttons[3].addEventListener('click', this.end.bind(this));    
     };
 
-    Pager$1.prototype = {
-        forward: function () {
-            this._current = this._current + 1 < this._max ? this._current + 1 : this._max;
-            this._input.value = this._current.toString();
-            if (typeof (this._onChange) === 'function') {
-                this._onChange(this._current);
-            }
-        },
-        back: function () {
-            this._current = this._current - 1 > 0 ? this._current - 1 : 1;
-            this._input.value = this._current.toString();
-            if (typeof (this._onChange) === 'function') {
-                this._onChange(this._current);
-            }
-        },
-        start: function() {
-            this._current = 1;
-            this._input.value = this._current.toString();
-            if (typeof (this._onChange) === 'function') {
-                this._onChange(this._current);
-            }
-        },
-        end: function () {
-            this._current = this._max;
-            this._input.value = this._current.toString();
-            if (typeof (this._onChange) === 'function') {
-                this._onChange(this._current);
-            }
-        },
-        choose: function () {
-            var input = Number(this._input.value);
-            if (!isNaN(input) && input > 0 && input <= this._max) {
-                this._current = input;
-            } else {
-                this._input.value = this._current.toString();
-            }
-
-            if (typeof (this._onChange) === 'function') {
-                this._onChange(this._current);
-            }
-        }
-    };
+    Pager$1.prototype = Object.create(scanexEventTarget_cjs.prototype);
 
     Pager$1.prototype.constructor = Pager$1;
+
+    Pager$1.prototype._change = function() {
+        let event = document.createEvent('Event');
+        event.initEvent('change', false, false);
+        event.detail = this._current;
+        this.dispatchEvent(event);
+    };
+
+    Pager$1.prototype.forward = function () {
+        this._current = this._current + 1 < this._max ? this._current + 1 : this._max;
+        this._input.value = this._current.toString();    
+        this._change();
+    };
+    Pager$1.prototype.back = function () {
+        this._current = this._current - 1 > 0 ? this._current - 1 : 1;
+        this._input.value = this._current.toString();
+        this._change();
+    };
+    Pager$1.prototype.start = function() {
+        this._current = 1;
+        this._input.value = this._current.toString();
+        this._change();    
+    };
+    Pager$1.prototype.end = function () {
+        this._current = this._max;
+        this._input.value = this._current.toString();
+        this._change();
+    };
+    Pager$1.prototype.choose = function () {
+        var input = Number(this._input.value);
+        if (!isNaN(input) && input > 0 && input <= this._max) {
+            this._current = input;
+        } else {
+            this._input.value = this._current.toString();
+        }
+        this._change();
+    };
 
     var Pager_1 = Pager$1;
 
@@ -123,12 +213,16 @@ var App = (function () {
         this._pages = this._options.pages || 1;
         this._onChange = onChange;
 
-        this._pager = new Pager_1(this._footer, {max: this._pages, current: this._current}, this.setPage.bind(this));
+        this._pager = new Pager_1(this._footer, {max: this._pages, current: this._current});
+        this._pager.addEventListener('change', function (e) {
+            this.setPage(e.detail);
+        }.bind(this));
 
         this.setPage (this._current);
     };
 
     Grid$1.prototype = {
+
         setPage: function (page) {
             if (typeof (this._onChange) === 'function') {
                 var rows = this._onChange (page, this._pageSize);

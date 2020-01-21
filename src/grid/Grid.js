@@ -31,12 +31,16 @@ var Grid = function(container, options, onChange) {
     this._pages = this._options.pages || 1;
     this._onChange = onChange;
 
-    this._pager = new Pager(this._footer, {max: this._pages, current: this._current}, this.setPage.bind(this));
+    this._pager = new Pager(this._footer, {max: this._pages, current: this._current});
+    this._pager.addEventListener('change', function (e) {
+        this.setPage(e.detail);
+    }.bind(this));
 
     this.setPage (this._current);
 };
 
 Grid.prototype = {
+
     setPage: function (page) {
         if (typeof (this._onChange) === 'function') {
             var rows = this._onChange (page, this._pageSize);
