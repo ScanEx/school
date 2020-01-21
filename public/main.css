@@ -1,0 +1,47 @@
+.grid {
+    font-family: sans-serif;
+}
+
+.content tbody {
+    display: block;
+    height: 500px;
+    overflow-x: auto;
+    overflow-y: scroll;
+}
+
+.content thead, tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+.content thead {
+    width: calc( 100% - 1em );
+}
+
+.content .even {
+    background-color: lightsteelblue;
+}
+
+table {
+    width: 600px;
+}
+.pager {
+    text-align: center;
+    vertical-align: middle;
+}
+.pager > * {    
+    cursor: pointer;    
+    padding: 5px;
+    margin: 3px;
+    width: 50px;
+    text-align: center;
+}
+.pager .button {    
+    background-color: lightgrey;
+    display: inline-block;
+}
+.pager input {
+    width: 50px;
+    text-align: center;
+}

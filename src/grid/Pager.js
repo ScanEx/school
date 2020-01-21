@@ -1,3 +1,5 @@
+require ('./Pager.css');
+
 var Pager = function (container, options, onChange) {
     this._container = container;
     this._options = options || {};
@@ -68,3 +70,5 @@ Pager.prototype = {
 };
 
 Pager.prototype.constructor = Pager;
+
+module.exports = Pager;

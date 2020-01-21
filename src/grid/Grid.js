@@ -1,3 +1,7 @@
+var Pager = require ('./Pager.js');
+
+require ('./Grid.css');
+
 var Grid = function(container, options, onChange) {
     this._container = container;
     this._options = options || {};
@@ -42,13 +46,13 @@ Grid.prototype = {
 
     _render: function (rows) {
         if (Array.isArray(rows) && rows.length > 0) {
-            var t = '<table border=1>';
+            var t = '<table>';
             t += '<thead><tr>' + this._columns.map(function(c) {
                 return '<th>' + c.title + '</th>';
             }).join('') + '</tr></thead>';
             t += '<tbody>';
             for (var i = 0; i < rows.length; ++i) {
-                t += '<tr>';
+                t += i % 2 !== 0 ? '<tr class="even">' : '<tr>';
                 var cells = rows[i];
                 for (var j = 0; j < this._visibleColumns.length; ++j) {
                     var k = this._visibleColumns[j];
@@ -86,3 +90,5 @@ Grid.prototype = {
 };
 
 Grid.prototype.constructor = Grid;
+
+module.exports = Grid;

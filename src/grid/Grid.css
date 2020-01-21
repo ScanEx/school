@@ -19,6 +19,10 @@
     width: calc( 100% - 1em );
 }
 
+.content .even {
+    background-color: lightsteelblue;
+}
+
 table {
     width: 600px;
 }
