@@ -6,14 +6,12 @@ class Pager extends EventTarget {
         super();
         this._container = container;
         this._options = options || {};
-        this._max = this._options.max || 1;
-        this._current = this._options.current || 1;
-
+        this._max = this._options.max || 1;        
         this._container.innerHTML =
             `<div class="pager">
                 <i class="icon fast-backward"></i>
                 <i class="icon backward"></i>
-                <input class="current" type="text" value="${this._current.toString()}">
+                <input class="current" type="text" value="">
                 <i class="icon forward"></i>
                 <i class="icon fast-forward"></i>
             </div>`;
@@ -24,24 +22,24 @@ class Pager extends EventTarget {
         buttons[0].addEventListener('click', this.start.bind(this));
         buttons[1].addEventListener('click', this.back.bind(this));
         buttons[2].addEventListener('click', this.forward.bind(this));
-        buttons[3].addEventListener('click', this.end.bind(this));    
+        buttons[3].addEventListener('click', this.end.bind(this));
     }
     get current () {
         return this._current;
     }
-    set current (c) {
+    set current (c) {        
         if (!isNaN(c) && 1 <= c && c <= this._max) {
             this._current = c;
             this._input.value = this._current.toString();
-            this._change();
-        }        
-    }
-    _change () {
-        let event = document.createEvent('Event');
-        event.initEvent('change', false, false);
-        event.detail = this.current;
-        this.dispatchEvent(event);
-    }
+            let event = document.createEvent('Event');
+            event.initEvent('change', false, false);
+            event.detail = this._current;
+            this.dispatchEvent(event);
+        }
+        else {
+            this._input.value = this._current.toString();
+        }         
+    }    
     forward () {        
         this.current += 1;
     }
@@ -56,7 +54,6 @@ class Pager extends EventTarget {
     }
     choose () {        
         this.current = parseInt(this._input.value, 10);
-        this._input.value = this.current.toString();
     }
 }
 

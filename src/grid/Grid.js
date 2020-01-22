@@ -25,27 +25,23 @@ class Grid {
                 this._columns.push(this._options.columns[k]);
             }
         }
-    
-        this._current = 1; // текущая страница
-        this._pageSize = this._options.pageSize || 1; // элементов на странице
-        this._pages = this._options.pages || 1;
+                    
+        const pages = this._options.pages || 1;
         this._onChange = onChange;
     
-        this._pager = new Pager(this._footer, {max: this._pages, current: this._current});
-        this._pager.addEventListener('change', e => this.page = e.detail);
-    
-        this.page = this._current;
+        this._pager = new Pager(this._footer, {max: pages});
+        this._pager.addEventListener('change', this._onChangePage.bind(this));
+        this.page = 1;
     }
     get page () {
-        return this._current;
+        return this._pager.current;
     }
     set page (p) {
-        if(!isNaN(p) && 1 <= p && p <= this._pages) {
-            this._current = p;
-            if (typeof (this._onChange) === 'function') {
-                const rows = this._onChange (p, this._pageSize);
-                this._render(rows);
-            }
+        this._pager.current = p;        
+    }
+    _onChangePage ({detail}) {        
+        if (typeof (this._onChange) === 'function') {        
+            this._render(this._onChange (detail));
         }
     }
     _render (rows) {

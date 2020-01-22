@@ -6,13 +6,13 @@ import './icons.css';
 
 window.onload = function () {
     const container = document.querySelector('#app');
-    let options = {
-        pageSize: 25,
+    const pageSize = 25;
+    let options = {        
         visibleColumns: ['VesselID', 'ObservationID', 'IcePassage#', 'RecordMSK', 'RecordUTC'],
         columns: COLUMNS,
-    };
-    options.pages = Math.ceil (DB.length / options.pageSize);
-    const grid = new Grid(container, options, (index, pageSize) => {
+        pages: Math.ceil (DB.length / pageSize),
+    };        
+    new Grid(container, options, index => {
         const start = (index - 1) * pageSize;
         const end = index * pageSize;
         return DB.slice(start, end);
