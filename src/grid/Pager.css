@@ -3,17 +3,19 @@
     vertical-align: middle;
 }
 .pager > * {    
-    cursor: pointer;    
-    padding: 5px;
-    margin: 3px;
-    width: 50px;
+    cursor: pointer;
     text-align: center;
+    vertical-align: middle;
 }
-.pager .button {    
-    background-color: lightgrey;
-    display: inline-block;
+.pager .icon {
+    display: inline-block;    
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 24px;
+    height: 24px;
 }
 .pager input {
     width: 50px;
     text-align: center;
+    margin: 0px 8px 0px 8px;
 }

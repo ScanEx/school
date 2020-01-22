@@ -5,7 +5,7 @@ import json from 'rollup-plugin-json';
 import css from 'rollup-plugin-css-porter';
 import babel from 'rollup-plugin-babel';
 // import cpy from 'rollup-plugin-cpy';
-import {terser} from 'rollup-plugin-terser';
+import { terser } from 'rollup-plugin-terser';
 import pkg from './package.json';
 
 export default {
@@ -26,10 +26,10 @@ export default {
             //     files: ['src/*.png'],
             //     dest: 'wwwroot'
             // }),
-            // babel({
-            //     include: ['src/**'],
-            //     exclude: 'node_modules/**'
-            // }),
+            babel({
+                include: ['src/**'],
+                exclude: 'node_modules/**'
+            }),
             terser(),
         ]
     };
