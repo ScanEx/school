@@ -1,8 +1,10 @@
 import Pager from './Pager.js';
 import './Grid.css';
+import EventTarget from 'scanex-event-target';
 
-class Grid {
-    constructor(container, options, onChange) {
+class Grid extends EventTarget {
+    constructor(container, options) {
+        super();
         this._container = container;
         this._options = options || {};
     
@@ -25,26 +27,49 @@ class Grid {
                 this._columns.push(this._options.columns[k]);
             }
         }
-                    
+
+        this._formatters = this._options.formatters || {
+            'date': value => {
+                const rx = /(?<d>\d\d)\/(?<m>\d\d)\/(?<y>\d\d\d\d)\s(?<H>\d\d?):(?<M>\d\d?)/g;
+                const match = rx.exec(value);
+                if (match && match.groups) {
+                    const y = parseInt(match.groups.y, 10);
+                    const m = parseInt(match.groups.m, 10) - 1;
+                    const d = parseInt(match.groups.d, 10);
+                    const H = parseInt(match.groups.H, 10);
+                    const M = parseInt(match.groups.M, 10);
+                    const date = new Date(y,m,d,H,M);
+                    return date.toLocaleDateString();
+                }
+                else {
+                    return value;
+                }                
+            }
+        };
+
         const pages = this._options.pages || 1;
-        this._onChange = onChange;
-    
         this._pager = new Pager(this._footer, {max: pages});
-        this._pager.addEventListener('change', this._onChangePage.bind(this));
-        this.page = 1;
+        this._pager.addEventListener('change', this._onChangePage.bind(this));        
+    }
+    _onChangePage ({detail}) {        
+        let event = document.createEvent('Event');
+        event.initEvent('change', false, false);
+        event.detail = detail;
+        this.dispatchEvent(event);
+    }
+    get formatters () {
+        return this._formatters;
+    }
+    set formatters (formatters) {
+        this._formatters = formatters;
     }
     get page () {
         return this._pager.current;
     }
     set page (p) {
         this._pager.current = p;        
-    }
-    _onChangePage ({detail}) {        
-        if (typeof (this._onChange) === 'function') {        
-            this._render(this._onChange (detail));
-        }
-    }
-    _render (rows) {
+    }    
+    set items (rows) {
         if (Array.isArray(rows) && rows.length > 0) {            
             this._content.innerHTML = `<table>
                 <thead>
@@ -52,8 +77,10 @@ class Grid {
                 </thead>
                 <tbody>
                 ${rows.map((row, i) => {
-                    return `<tr class="${i % 2 === 0 ? 'odd' : 'even'}">${this._visibleColumns.map(column => {
-                        return `<td>${row[column]}</td>`;
+                    return `<tr class="${i % 2 === 0 ? 'odd' : 'even'}">${this._visibleColumns.map((k,j) => {
+                        const {type} = this._columns[j];
+                        const f = this._formatters[type];
+                        return `<td>${f ? f (row[k]) : row[k]}</td>`;
                     }).join('')}</tr>`;
                 }).join('')}
                 </tbody>

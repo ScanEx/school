@@ -23,12 +23,12 @@
     width: calc( 100% - 1em );
 }
 
-.content .even {
-    background-color: lightsteelblue;
+.content td {
+    white-space: nowrap;
 }
 
-table {
-    width: 600px;
+.content .even {
+    background-color: lightsteelblue;
 }
 .pager {
     text-align: center;

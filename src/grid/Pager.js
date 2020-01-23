@@ -9,11 +9,13 @@ class Pager extends EventTarget {
         this._max = this._options.max || 1;        
         this._container.innerHTML =
             `<div class="pager">
+                <label>1</label>
                 <i class="icon fast-backward"></i>
                 <i class="icon backward"></i>
                 <input class="current" type="text" value="">
                 <i class="icon forward"></i>
                 <i class="icon fast-forward"></i>
+                <label>${this._max}</label>
             </div>`;
         this._input = this._container.querySelector('.current');
         this._input.addEventListener('change', this.choose.bind(this));

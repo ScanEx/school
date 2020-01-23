@@ -1,2 +1,303 @@
-!function(){"use strict";function t(t,e){for(var n=0;n<e.length;n++){var i=e[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}var e=function(){function e(){!function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,e),this.listeners={}}var n,i,s;return n=e,(i=[{key:"addEventListener",value:function(t,e){t in this.listeners||(this.listeners[t]=[]),this.listeners[t].push(e)}},{key:"on",value:function(t,e){return this.addEventListener(t,e),this}},{key:"removeEventListener",value:function(t,e){if(t in this.listeners)for(var n=this.listeners[t],i=0,s=n.length;i<s;i++)if(n[i]===e)return n.splice(i,1),this.removeEventListener(t,e)}},{key:"off",value:function(t,e){return this.removeEventListener(t,e),this}},{key:"dispatchEvent",value:function(t){if(t.type in this.listeners){var e=this.listeners[t.type];Object.defineProperty(t,"target",{enumerable:!1,configurable:!1,writable:!1,value:this});for(var n=0,i=e.length;n<i;n++)e[n].call(this,t)}}}])&&t(n.prototype,i),s&&t(n,s),e}();class n extends e{constructor(t,e){super(),this._container=t,this._options=e||{},this._max=this._options.max||1,this._container.innerHTML='<div class="pager">\n                <i class="icon fast-backward"></i>\n                <i class="icon backward"></i>\n                <input class="current" type="text" value="">\n                <i class="icon forward"></i>\n                <i class="icon fast-forward"></i>\n            </div>',this._input=this._container.querySelector(".current"),this._input.addEventListener("change",this.choose.bind(this));const n=this._container.querySelectorAll(".icon");n[0].addEventListener("click",this.start.bind(this)),n[1].addEventListener("click",this.back.bind(this)),n[2].addEventListener("click",this.forward.bind(this)),n[3].addEventListener("click",this.end.bind(this))}get current(){return this._current}set current(t){if(!isNaN(t)&&1<=t&&t<=this._max){this._current=t,this._input.value=this._current.toString();let e=document.createEvent("Event");e.initEvent("change",!1,!1),e.detail=this._current,this.dispatchEvent(e)}else this._input.value=this._current.toString()}forward(){this.current+=1}back(){this.current-=1}start(){this.current=1}end(){this.current=this._max}choose(){this.current=parseInt(this._input.value,10)}}class i{constructor(t,e,i){this._container=t,this._options=e||{},this._container.innerHTML='<table class="scanex-school grid">\n                <tr><td class="content"></td></tr>\n                <tr><td class="footer"></td></tr>\n            </table>',this._content=this._container.querySelector(".content"),this._footer=this._container.querySelector(".footer");const s=Object.keys(this._options.columns);this._visibleColumns=[],this._columns=[];for(let t=0;t<s.length;++t){let e=s[t];-1!=this._options.visibleColumns.indexOf(e)&&(this._visibleColumns.push(t),this._columns.push(this._options.columns[e]))}const r=this._options.pages||1;this._onChange=i,this._pager=new n(this._footer,{max:r}),this._pager.addEventListener("change",this._onChangePage.bind(this)),this.page=1}get page(){return this._pager.current}set page(t){this._pager.current=t}_onChangePage({detail:t}){"function"==typeof this._onChange&&this._render(this._onChange(t))}_render(t){Array.isArray(t)&&t.length>0?this._content.innerHTML=`<table>\n                <thead>\n                    <tr>${this._columns.map(({title:t})=>`<th>${t}</th>`).join("")}</tr>\n                </thead>\n                <tbody>\n                ${t.map((t,e)=>`<tr class="${e%2==0?"odd":"even"}">${this._visibleColumns.map(e=>`<td>${t[e]}</td>`).join("")}</tr>`).join("")}\n                </tbody>\n            </table>`:this._content.innerHTML=""}start(){this._pager.start()}forward(){this._pager.forward()}back(){this._pager.back()}end(){this._pager.end()}}window.onload=function(){const t=document.querySelector("#app");let e={visibleColumns:["VesselID","ObservationID","IcePassage#","RecordMSK","RecordUTC"],columns:COLUMNS,pages:Math.ceil(DB.length/25)};new i(t,e,t=>{const e=25*(t-1),n=25*t;return DB.slice(e,n)})}}();
+(function () {
+  'use strict';
+
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+
+  function _defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+
+  function _createClass(Constructor, protoProps, staticProps) {
+    if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) _defineProperties(Constructor, staticProps);
+    return Constructor;
+  }
+
+  var EventTarget =
+  /*#__PURE__*/
+  function () {
+    function EventTarget() {
+      _classCallCheck(this, EventTarget);
+
+      this.listeners = {};
+    }
+
+    _createClass(EventTarget, [{
+      key: "addEventListener",
+      value: function addEventListener(type, callback) {
+        if (!(type in this.listeners)) {
+          this.listeners[type] = [];
+        }
+
+        this.listeners[type].push(callback);
+      }
+    }, {
+      key: "on",
+      value: function on(type, callback) {
+        this.addEventListener(type, callback);
+        return this;
+      }
+    }, {
+      key: "removeEventListener",
+      value: function removeEventListener(type, callback) {
+        if (!(type in this.listeners)) {
+          return;
+        }
+
+        var stack = this.listeners[type];
+
+        for (var i = 0, l = stack.length; i < l; i++) {
+          if (stack[i] === callback) {
+            stack.splice(i, 1);
+            return this.removeEventListener(type, callback);
+          }
+        }
+      }
+    }, {
+      key: "off",
+      value: function off(type, callback) {
+        this.removeEventListener(type, callback);
+        return this;
+      }
+    }, {
+      key: "dispatchEvent",
+      value: function dispatchEvent(event) {
+        if (!(event.type in this.listeners)) {
+          return;
+        }
+
+        var stack = this.listeners[event.type];
+        Object.defineProperty(event, 'target', {
+          enumerable: false,
+          configurable: false,
+          writable: false,
+          value: this
+        });
+
+        for (var i = 0, l = stack.length; i < l; i++) {
+          stack[i].call(this, event);
+        }
+      }
+    }]);
+
+    return EventTarget;
+  }();
+
+  var scanexEventTarget_cjs = EventTarget;
+
+  class Pager extends scanexEventTarget_cjs {
+    constructor(container, options) {
+      super();
+      this._container = container;
+      this._options = options || {};
+      this._max = this._options.max || 1;
+      this._container.innerHTML = `<div class="pager">
+                <label>1</label>
+                <i class="icon fast-backward"></i>
+                <i class="icon backward"></i>
+                <input class="current" type="text" value="">
+                <i class="icon forward"></i>
+                <i class="icon fast-forward"></i>
+                <label>${this._max}</label>
+            </div>`;
+      this._input = this._container.querySelector('.current');
+
+      this._input.addEventListener('change', this.choose.bind(this));
+
+      const buttons = this._container.querySelectorAll('.icon');
+
+      buttons[0].addEventListener('click', this.start.bind(this));
+      buttons[1].addEventListener('click', this.back.bind(this));
+      buttons[2].addEventListener('click', this.forward.bind(this));
+      buttons[3].addEventListener('click', this.end.bind(this));
+    }
+
+    get current() {
+      return this._current;
+    }
+
+    set current(c) {
+      if (!isNaN(c) && 1 <= c && c <= this._max) {
+        this._current = c;
+        this._input.value = this._current.toString();
+        let event = document.createEvent('Event');
+        event.initEvent('change', false, false);
+        event.detail = this._current;
+        this.dispatchEvent(event);
+      } else {
+        this._input.value = this._current.toString();
+      }
+    }
+
+    forward() {
+      this.current += 1;
+    }
+
+    back() {
+      this.current -= 1;
+    }
+
+    start() {
+      this.current = 1;
+    }
+
+    end() {
+      this.current = this._max;
+    }
+
+    choose() {
+      this.current = parseInt(this._input.value, 10);
+    }
+
+  }
+
+  class Grid extends scanexEventTarget_cjs {
+    constructor(container, options) {
+      super();
+      this._container = container;
+      this._options = options || {};
+      this._container.innerHTML = `<table class="scanex-school grid">
+                <tr><td class="content"></td></tr>
+                <tr><td class="footer"></td></tr>
+            </table>`;
+      this._content = this._container.querySelector('.content');
+      this._footer = this._container.querySelector('.footer');
+      const cks = Object.keys(this._options.columns);
+      this._visibleColumns = [];
+      this._columns = [];
+
+      for (let i = 0; i < cks.length; ++i) {
+        let k = cks[i];
+
+        if (this._options.visibleColumns.indexOf(k) != -1) {
+          this._visibleColumns.push(i);
+
+          this._columns.push(this._options.columns[k]);
+        }
+      }
+
+      this._formatters = this._options.formatters || {
+        'date': value => {
+          const rx = /(?<d>\d\d)\/(?<m>\d\d)\/(?<y>\d\d\d\d)\s(?<H>\d\d?):(?<M>\d\d?)/g;
+          const match = rx.exec(value);
+
+          if (match && match.groups) {
+            const y = parseInt(match.groups.y, 10);
+            const m = parseInt(match.groups.m, 10) - 1;
+            const d = parseInt(match.groups.d, 10);
+            const H = parseInt(match.groups.H, 10);
+            const M = parseInt(match.groups.M, 10);
+            const date = new Date(y, m, d, H, M);
+            return date.toLocaleDateString();
+          } else {
+            return value;
+          }
+        }
+      };
+      const pages = this._options.pages || 1;
+      this._pager = new Pager(this._footer, {
+        max: pages
+      });
+
+      this._pager.addEventListener('change', this._onChangePage.bind(this));
+    }
+
+    _onChangePage({
+      detail
+    }) {
+      let event = document.createEvent('Event');
+      event.initEvent('change', false, false);
+      event.detail = detail;
+      this.dispatchEvent(event);
+    }
+
+    get formatters() {
+      return this._formatters;
+    }
+
+    set formatters(formatters) {
+      this._formatters = formatters;
+    }
+
+    get page() {
+      return this._pager.current;
+    }
+
+    set page(p) {
+      this._pager.current = p;
+    }
+
+    set items(rows) {
+      if (Array.isArray(rows) && rows.length > 0) {
+        this._content.innerHTML = `<table>
+                <thead>
+                    <tr>${this._columns.map(({
+        title
+      }) => `<th>${title}</th>`).join('')}</tr>
+                </thead>
+                <tbody>
+                ${rows.map((row, i) => {
+        return `<tr class="${i % 2 === 0 ? 'odd' : 'even'}">${this._visibleColumns.map((k, j) => {
+          const {
+            type
+          } = this._columns[j];
+          const f = this._formatters[type];
+          return `<td>${f ? f(row[k]) : row[k]}</td>`;
+        }).join('')}</tr>`;
+      }).join('')}
+                </tbody>
+            </table>`;
+      } else {
+        this._content.innerHTML = '';
+      }
+    }
+
+    start() {
+      this._pager.start();
+    }
+
+    forward() {
+      this._pager.forward();
+    }
+
+    back() {
+      this._pager.back();
+    }
+
+    end() {
+      this._pager.end();
+    }
+
+  }
+
+  window.onload = function () {
+    const container = document.querySelector('#app');
+    const pageSize = 20;
+    let options = {
+      visibleColumns: ['VesselID', 'ObservationID', 'IcePassage#', 'RecordMSK', 'RecordUTC', 'Visibility'],
+      columns: COLUMNS,
+      pages: Math.ceil(DB.length / pageSize)
+    };
+    const grid = new Grid(container, options);
+    grid.addEventListener('change', ({
+      detail
+    }) => {
+      const start = (detail - 1) * pageSize;
+      const end = detail * pageSize;
+      grid.items = DB.slice(start, end);
+    });
+    grid.start();
+  };
+
+}());
 //# sourceMappingURL=main.js.map
