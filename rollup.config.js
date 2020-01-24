@@ -1,3 +1,4 @@
+import svelte from 'rollup-plugin-svelte';
 import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 import { eslint } from 'rollup-plugin-eslint';
@@ -16,7 +17,8 @@ export default {
             sourcemap: true,
             name: 'App',
         },
-        plugins: [        
+        plugins: [
+            svelte(),        
             resolve(),
             commonjs(),
             json(),

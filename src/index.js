@@ -1,19 +1,22 @@
-import Grid from './grid/Grid.js';
+import Grid from './grid/Grid.svelte';
 import './icons.css';
 
 window.onload = function () {
     const container = document.querySelector('#app');
-    const pageSize = 20;
-    let options = {        
-        visibleColumns: ['VesselID', 'ObservationID', 'IcePassage#', 'RecordMSK', 'RecordUTC', 'Visibility'],
-        columns: COLUMNS,
-        pages: Math.ceil (DB.length / pageSize),
-    };
-    const grid = new Grid(container, options);
-    grid.addEventListener('change', ({detail}) => {
+    const pageSize = 25;
+    const grid = new Grid({
+        target: container,
+        props: {
+            visibleColumns: ['VesselID', 'ObservationID', 'IcePassage#', 'RecordMSK', 'RecordUTC', 'Visibility'],
+            columns: COLUMNS,
+            pages: Math.ceil (DB.length / pageSize),
+        }
+    });
+    grid.$on('change', ({detail}) => {        
         const start = (detail - 1) * pageSize;
         const end = detail * pageSize;
-        grid.items = DB.slice(start, end);
-    });
-    grid.start();
+        const rows = DB.slice(start, end);
+        grid.$set({rows});
+    })
+    grid.start();    
 }

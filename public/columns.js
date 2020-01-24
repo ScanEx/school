@@ -18,6 +18,7 @@ var COLUMNS = {
     "RecordUTC": {
         title: 'RecordUTC',
         type: 'date',
+        formatter: value => value,
     },
     "UserTimeZoneShift": {
         title: 'UserTimeZoneShift',
