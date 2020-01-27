@@ -1,0 +1,1 @@
+connectionString: 'postgres://postgres:PgKosmo@pgsql.kosmosnimki.ru:5432/maps'

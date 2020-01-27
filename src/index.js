@@ -1,22 +1,31 @@
 import Grid from './grid/Grid.svelte';
 import './icons.css';
+import columns from './columns.js';
 
-window.onload = function () {
+window.onload = function () {           
+    const pageSize = 50;
     const container = document.querySelector('#app');
-    const pageSize = 25;
     const grid = new Grid({
         target: container,
         props: {
-            visibleColumns: ['VesselID', 'ObservationID', 'IcePassage#', 'RecordMSK', 'RecordUTC', 'Visibility'],
-            columns: COLUMNS,
-            pages: Math.ceil (DB.length / pageSize),
+            visibleColumns: ['vessel_name','vessel_type', 'flag_country', 'destination', 'eta', 'heading', 'sog', 'cog'],
+            columns,
+            pages: 1,
         }
+    });        
+    grid.$on('change', ({detail}) => {
+        const offset = (detail - 1) * pageSize;
+        fetch(`/ais/${pageSize}/${offset}`)
+        .then(res => res.json())
+        .then(({count, rows}) => {
+            const items = rows.map(row => {
+                return Object.keys(row).map(k => row[k]);
+            });
+            grid.$set({rows: items, pages: Math.ceil (count / pageSize)});
+        })
+        .catch (e => {
+            console.log(e);
+        });                        
     });
-    grid.$on('change', ({detail}) => {        
-        const start = (detail - 1) * pageSize;
-        const end = detail * pageSize;
-        const rows = DB.slice(start, end);
-        grid.$set({rows});
-    })
     grid.start();    
-}
+};
