@@ -1,0 +1,32 @@
+.grid .header td {    
+    background-color: steelblue;
+    font-weight: bold;
+    color: white;
+    height: 50px;
+}
+.grid .content {
+    max-height: 500px;
+    overflow-y: auto;
+}
+.grid .content td {        
+    height: 30px;
+}
+.grid .content td {
+    border-right: 1px solid slategray;
+}
+.grid .content td:first-child {
+    border-left: 1px solid slategray;
+}
+.grid .content .even {
+    background-color: lightsteelblue;
+}
+.grid .header td,
+.grid .content td {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.grid .footer {
+    height: 30px;
+    background-color: gainsboro;
+    padding: 8px 10px 0px 10px;
+}

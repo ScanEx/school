@@ -13,15 +13,15 @@ export default {
     },
     vessel_name: {
         type: 'string', 
-        title: 'vessel_name'
+        title: 'Название',
     },
     callsign: {
         type: 'string',
-        title: 'callsign'
+        title: 'Радиопозывной'
     },
     vessel_type: {
         type: 'string',
-        title: 'vessel_type'
+        title: 'Тип'
     },
     vessel_type_code: {
         type: 'integer',
@@ -45,7 +45,7 @@ export default {
     },
     flag_country: {
         type: 'string',     
-        title: 'flag_country'
+        title: 'Флаг',
     },
     flag_code: {
         type: 'integer',
@@ -53,11 +53,11 @@ export default {
     },
     destination: {
         type: 'string',
-        title: 'destination'
+        title: 'Пункт назначения'
     },
     eta: {
         type: 'string',
-        title: 'eta'
+        title: 'Время прибытия'
     },
     draught: {
         type: 'float',
@@ -65,27 +65,31 @@ export default {
     },
     longitude: {
         type: 'float',
-        title: 'longitude'
+        title: 'Долгота'
     },
     latitude: {
         type: 'float',
-        title: 'latitude'
+        title: 'Широта'
     },
     sog: {
         type: 'float',
-        title: 'sog'
+        title: 'Скорость',
+        style: 'text-align: right'
     },
     cog: {
         type: 'float',
-        title: 'cog'
+        title: 'Курс',
+        style: 'text-align: right'
     },
     rot: {
         type: 'float',
-        title: 'rot'
+        title: 'Угловая скорость поворота',
+        style: 'text-align: right'
     },
     heading: {
         type: 'integer',
-        title: 'heading'
+        title: 'Путевой угол',
+        style: 'text-align: right'
     },
     nav_status: {
         type: 'string',     
