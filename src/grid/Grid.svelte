@@ -95,8 +95,8 @@
             </colgroup>
             <tbody bind:this="{_hr}">
                 <tr>                    
-                {#each _columns as {title}, i}
-                <td>{title}</td>
+                {#each _columns as {title}, i}                
+                <td>{title}</td>                
                 {/each}
                 </tr>
             </tbody>

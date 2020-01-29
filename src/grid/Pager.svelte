@@ -47,10 +47,10 @@
 
 <div class="pager">
     <label>1</label>
-    <i class="icon fast-backward" on:click|stopPropagation="{start}"></i>
-    <i class="icon backward" on:click|stopPropagation="{backward}"></i>
-    <input class="current" type="text" on:change|stopPropagation="{change}" value="{current}">
-    <i class="icon forward" on:click|stopPropagation="{forward}"></i>
-    <i class="icon fast-forward" on:click|stopPropagation="{end}"></i>
+    <i class="icon fast-backward" tabindex="-4" on:click|stopPropagation="{start}"></i>
+    <i class="icon backward" tabindex="-3" on:click|stopPropagation="{backward}"></i>
+    <input class="current" tabindex="-2" aria-label="current" type="text" on:change|stopPropagation="{change}" value="{current}">
+    <i class="icon forward" tabindex="-1" on:click|stopPropagation="{forward}"></i>
+    <i class="icon fast-forward" tabindex="0" on:click|stopPropagation="{end}"></i>
     <label>{max}</label>
 </div>

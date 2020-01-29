@@ -5,6 +5,7 @@
     height: 50px;
 }
 .grid .content {
+    height: 500px;
     max-height: 500px;
     overflow-y: auto;
 }
@@ -19,6 +20,9 @@
 }
 .grid .content .even {
     background-color: lightsteelblue;
+}
+.grid .content .odd {
+    background-color: whitesmoke;
 }
 .grid .header td,
 .grid .content td {

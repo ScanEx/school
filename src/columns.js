@@ -13,7 +13,7 @@ export default {
     },
     vessel_name: {
         type: 'string', 
-        title: 'Название',
+        title: 'Название',        
     },
     callsign: {
         type: 'string',
